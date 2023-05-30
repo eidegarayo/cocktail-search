@@ -1,0 +1,69 @@
+"use client"
+
+import { useEffect, useState } from 'react'
+import { getCategoriesList, getIngredientsList, getCocktailsByCat, getCocktailsByIngrs } from '@/src/api/cocktails.api'
+import Select from '@/src/components/Select/Select'
+import List from '@/src/components/List/List'
+import { filterListByIngrs } from './utils';
+import styles from './styles.module.scss'
+import { ICocktailListItem, IIngredient } from '@/src/api/cocktails.api.models';
+
+export default function Search() {
+  const [categoryList, setCategoryList] = useState<string[]>([]);
+  const [ingrList, setIngrList] = useState<string[]>([]);
+  const [category, setCategory] = useState<string>('');
+  const [ingredient, setIngredient] = useState<string>('');
+  const [list, setList] = useState<ICocktailListItem[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {   
+      const categories = await getCategoriesList();
+      const ingredients = await getIngredientsList();
+      setCategoryList(categories);
+      setIngrList(ingredients);
+    } 
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (!category) return;
+  
+    const fecthData = async () => {
+      const cocktailsListByCat = await getCocktailsByCat(category)
+      setList(cocktailsListByCat || []);
+      setIngredient('');
+    }
+    fecthData();
+  }, [category]);
+
+  useEffect(() => {
+    if (!ingredient) return;
+
+    const fetchData = async () => {
+      const listByIngr = await getCocktailsByIngrs(ingredient);
+      const cocktailsList = filterListByIngrs(list, listByIngr);
+      setList(cocktailsList);
+
+      if (cocktailsList.length === 0) {
+        setIngredient('');
+        setCategory('');
+      }
+    };
+    fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ingredient]);
+
+
+  return (
+    <section>
+      <div className={styles.search}>
+        <Select options={categoryList} setOption={setCategory} option={category} label="Category" />
+        <Select options={ingrList} setOption={setIngredient} option={ingredient} label="Ingredient" />
+      </div>
+
+      {
+        list ?  <List list={list} /> : null
+      }
+    </section>
+  )
+}
