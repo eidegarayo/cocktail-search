@@ -1,3 +1,4 @@
+import { headers } from 'next/headers';
 import {
   ICategory,
   IIngredient,

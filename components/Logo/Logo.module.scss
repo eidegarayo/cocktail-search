@@ -1,0 +1,32 @@
+.logo_container {
+  height: 100%;
+
+  &_size {
+    &_small {
+      width: 25px;
+    }
+
+    &_medium {
+      width: 75px;
+    }
+
+    &_large {
+      width: 150px;
+    }
+  }
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .logo_container {
+    &_size {
+      &_large {
+        width: 80px;
+      }
+    }
+  }
+}

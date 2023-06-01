@@ -1,12 +1,14 @@
-"use client"
+'use client';
 
-import { useEffect, useState } from 'react'
-import { getCategoriesList, getIngredientsList, getCocktailsByCat, getCocktailsByIngrs } from '@/src/api/cocktails.api'
-import Select from '@/src/components/Select/Select'
-import List from '@/src/components/List/List'
+import { useEffect, useState } from 'react';
+import {
+  getCategoriesList, getIngredientsList, getCocktailsByCat, getCocktailsByIngrs,
+} from '@/api/cocktails.api';
+import Select from '@/components/Select/Select';
+import List from '@/components/List/List';
+import { ICocktailListItem } from '@/api/cocktails.api.models';
 import { filterListByIngrs } from './utils';
-import styles from './styles.module.scss'
-import { ICocktailListItem, IIngredient } from '@/src/api/cocktails.api.models';
+import styles from './page.module.scss';
 
 export default function Search() {
   const [categoryList, setCategoryList] = useState<string[]>([]);
@@ -16,23 +18,23 @@ export default function Search() {
   const [list, setList] = useState<ICocktailListItem[]>([]);
 
   useEffect(() => {
-    const fetchData = async () => {   
+    const fetchData = async () => {
       const categories = await getCategoriesList();
       const ingredients = await getIngredientsList();
       setCategoryList(categories);
       setIngrList(ingredients);
-    } 
+    };
     fetchData();
   }, []);
 
   useEffect(() => {
     if (!category) return;
-  
+
     const fecthData = async () => {
-      const cocktailsListByCat = await getCocktailsByCat(category)
+      const cocktailsListByCat = await getCocktailsByCat(category);
       setList(cocktailsListByCat || []);
       setIngredient('');
-    }
+    };
     fecthData();
   }, [category]);
 
@@ -53,17 +55,16 @@ export default function Search() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ingredient]);
 
-
   return (
     <section>
       <div className={styles.search}>
-        <Select options={categoryList} setOption={setCategory} option={category} label="Category" />
-        <Select options={ingrList} setOption={setIngredient} option={ingredient} label="Ingredient" />
+        <Select options={categoryList} setOption={setCategory} selectedOption={category} label="Category" />
+        <Select options={ingrList} setOption={setIngredient} selectedOption={ingredient} label="Ingredient" />
       </div>
 
       {
-        list ?  <List list={list} /> : null
+        list ? <List list={list} /> : null
       }
     </section>
-  )
+  );
 }

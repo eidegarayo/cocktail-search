@@ -1,10 +1,9 @@
-import { inter } from '@/styles/fonts';
-import Header from '@/src/components/Header/Header';
-import Footer from '@/src/components/Footer/Footer';
-import Main from '@/src/components/Main/Main';
-import '../styles/globals.css'
+import { montserrat } from '@/styles/fonts';
+import Header from '@/components/Header/Header';
+import Footer from '@/components/Footer/Footer';
+import Main from '@/components/Main/Main';
+import '../styles/globals.css';
 import styles from './layout.module.scss';
-
 
 export default function RootLayout({
   children,
@@ -14,9 +13,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <title>Buscador de cócteles</title>
+        <title>Your cocktail</title>
       </head>
-      <body className={`${styles.body} ${inter.className}`}>
+      <body className={`${styles.body} ${montserrat.className}`}>
         <Header />
         <Main>
           {children}
@@ -24,5 +23,5 @@ export default function RootLayout({
         <Footer />
       </body>
     </html>
-  )
+  );
 }
